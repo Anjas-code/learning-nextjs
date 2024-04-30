@@ -4,6 +4,8 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 export type State = {
     errors?: {
@@ -69,7 +71,7 @@ export async function updateInvoice(
     pervState: State,
     formData: FormData,
 ) {
-    const validatedFields = CreateInvoice.safeParse({
+    const validatedFields = UpdateInvoice.safeParse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
@@ -114,5 +116,24 @@ export async function deleteInvoice(id: string) {
         return {
             message: 'Database Error: Failed to Create Invoice.',
         };
+    }
+}
+
+export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData,
+) {
+    try {
+        await signIn('credentials', formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Invalid credentials.';
+                default:
+                    return 'Something went wrong.';
+            }
+        }
+        throw error;
     }
 }
