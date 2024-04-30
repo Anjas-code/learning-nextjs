@@ -3,7 +3,7 @@ import {
   HomeIcon,
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
-import { SIDEBAR_TYPE } from './type';
+import { SIDEBAR_TYPE } from './definitions.global';
 
 export const SIDEBAR_CONSTANT: SIDEBAR_TYPE = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
