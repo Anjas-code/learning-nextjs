@@ -5,3 +5,4 @@ export type SIDEBAR_TYPE = {
     Omit<React.SVGProps<SVGSVGElement>, 'ref'>
   >;
 }[];
+
